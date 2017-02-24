@@ -17,5 +17,11 @@ namespace Codewars.Katas.ConstructingCar
         void Refuel(double liters);
 
         void RunningIdle();
+
+        void BrakeBy(int speed);
+
+        void Accelerate(int speed);
+
+        void FreeWheel();
     }
 }

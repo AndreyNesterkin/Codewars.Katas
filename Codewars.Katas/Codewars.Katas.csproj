@@ -42,10 +42,14 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="ConstructingCar\Car.cs" />
+    <Compile Include="ConstructingCar\DrivingInformationDisplay.cs" />
+    <Compile Include="ConstructingCar\DrivingProcessor.cs" />
     <Compile Include="ConstructingCar\Engine.cs" />
     <Compile Include="ConstructingCar\FuelTank.cs" />
     <Compile Include="ConstructingCar\FuelTankDisplay.cs" />
     <Compile Include="ConstructingCar\ICar.cs" />
+    <Compile Include="ConstructingCar\IDrivingInformationDisplay.cs" />
+    <Compile Include="ConstructingCar\IDrivingProcessor.cs" />
     <Compile Include="ConstructingCar\IEngine.cs" />
     <Compile Include="ConstructingCar\IFuelTank.cs" />
     <Compile Include="ConstructingCar\IFuelTankDisplay.cs" />

@@ -123,4 +123,236 @@ public class Car1ExampleTests
 
         Assert.IsFalse(car.EngineIsRunning);
     }
+
+    [TestMethod]
+    public void TestStartSpeed()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestFreeWheelSpeed()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        Enumerable.Range(0, 10).ToList().ForEach(s => car.Accelerate(100));
+
+        Assert.AreEqual(100, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+
+        car.FreeWheel();
+        car.FreeWheel();
+        car.FreeWheel();
+
+        Assert.AreEqual(97, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestAccelerateBy10()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        Enumerable.Range(0, 10).ToList().ForEach(s => car.Accelerate(100));
+
+        car.Accelerate(160);
+        Assert.AreEqual(110, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        car.Accelerate(160);
+        Assert.AreEqual(120, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        car.Accelerate(160);
+        Assert.AreEqual(130, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        car.Accelerate(160);
+        Assert.AreEqual(140, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        car.Accelerate(145);
+        Assert.AreEqual(145, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestBraking()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        Enumerable.Range(0, 10).ToList().ForEach(s => car.Accelerate(100));
+
+        car.BrakeBy(20);
+
+        Assert.AreEqual(90, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+
+        car.BrakeBy(10);
+
+        Assert.AreEqual(80, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestConsumptionSpeedUpTo30()
+    {
+        var car = new Car(1, 20);
+
+        car.EngineStart();
+
+        car.Accelerate(30);
+        car.Accelerate(30);
+        car.Accelerate(30);
+        car.Accelerate(30);
+        car.Accelerate(30);
+        car.Accelerate(30);
+        car.Accelerate(30);
+        car.Accelerate(30);
+        car.Accelerate(30);
+        car.Accelerate(30);
+
+        Assert.AreEqual(0.98, car.fuelTankDisplay.FillLevel, "Wrong fuel tank fill level!");
+    }
+
+    [TestMethod]
+    public void TestCustomAccelerationGreaterThan20()
+    {
+        const int startFuelLevel = 20;
+        const int maxAcceleration = 100;
+
+        var car = new Car(startFuelLevel, maxAcceleration);
+
+        car.EngineStart();
+
+        car.Accelerate(100);
+
+        Assert.AreEqual(20, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestCustomAccelerationLesserThan5()
+    {
+        const int startFuelLevel = 20;
+        const int maxAcceleration = 1;
+
+        var car = new Car(startFuelLevel, maxAcceleration);
+
+        car.EngineStart();
+
+        car.Accelerate(100);
+
+        Assert.AreEqual(5, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void NegativeSpeedAccelerateShouldNotDrive()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        car.Accelerate(-10);
+
+        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void ZeroSpeedAccelerateShouldNotDrive()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        car.Accelerate(0);
+
+        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void UpperMaxSpeedAccelerateShouldNotAccelerate()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        Enumerable.Range(0, 26).ToList().ForEach(s => car.Accelerate(260));
+
+        Assert.AreEqual(250, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestNoAccelerationWhenEngineNotRunning()
+    {
+        var car = new Car();
+
+        car.Accelerate(100);
+
+        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestFreeWheelNoSpeedReduceWhenNoMoving()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        car.FreeWheel();
+
+        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestBrakeOnlyOver0()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        car.BrakeBy(10);
+
+        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestConsumptionAsRunIdleWhenFreeWheelingAt0()
+    {
+        var car = new Car(1);
+
+        car.EngineStart();
+
+        Enumerable.Range(0, 1000).ToList().ForEach(s => car.FreeWheel());
+
+        Assert.AreEqual(0.7, car.fuelTankDisplay.FillLevel, "Wrong fuel level!");
+    }
+
+    [TestMethod]
+    public void TestAccelerateLowerThanActualSpeed()
+    {
+        var car = new Car();
+
+        car.EngineStart();
+
+        Enumerable.Range(0, 10).ToList().ForEach(s => car.Accelerate(100));
+
+        car.Accelerate(30);
+
+        Assert.AreEqual(99, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
+
+    [TestMethod]
+    public void TestRandom()
+    {
+        var car = new Car(20, 10);
+
+        car.EngineStart();
+
+        Enumerable.Range(0, 10).ToList().ForEach(s => car.Accelerate(250));
+
+        car.BrakeBy(7);
+
+        Enumerable.Range(0, 15).ToList().ForEach(s => car.FreeWheel());
+
+        car.Accelerate(87);
+
+        Assert.AreEqual(87, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+    }
 }
