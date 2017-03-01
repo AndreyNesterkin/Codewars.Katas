@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Codewars.Katas.ConstructingCar
+﻿namespace Codewars.Katas.ConstructingCar
 {
     public class FuelTank : IFuelTank
     {

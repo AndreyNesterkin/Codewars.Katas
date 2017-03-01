@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Codewars.Katas.ConstructingCar
+﻿namespace Codewars.Katas.ConstructingCar
 {
     public class Car : ICar
     {
