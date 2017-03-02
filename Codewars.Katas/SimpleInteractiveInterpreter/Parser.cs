@@ -60,6 +60,17 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             if (_currentToken.Type == TokenType.DoubleConst)
                 return ParseDoubleConst();
 
+            if (_currentToken.Type == TokenType.LeftParenthesis)
+            {
+                MoveNext(TokenType.LeftParenthesis);
+                var node = ParseExpression();
+                MoveNext(TokenType.RightParenthesis);
+                return node;
+            }
+
+            if (_currentToken.Type == TokenType.Identifier)
+                return ParseIdentifier();
+
             throw new InvalidOperationException("Invalid factor");
         }
 
@@ -67,7 +78,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
         {
             var node = new DoubleConstAstNode(_currentToken);
 
-            MoveNext();
+            MoveNext(TokenType.DoubleConst);
 
             return node;
         }
@@ -75,14 +86,26 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
         private AstNode ParseBinaryOperation(AstNode leftOperand, Func<AstNode> parseRightOperand)
         {
             var operationToken = _currentToken;
-            MoveNext();
+            MoveNext(operationToken.Type);
 
             return new BinaryOperationAstNode(operationToken, leftOperand, parseRightOperand());
         }
 
-        private void MoveNext()
+        private void MoveNext(TokenType tokenType)
         {
-            _currentToken = _lexer.ReadNextToken();
+            if (_currentToken.Type == tokenType)
+                _currentToken = _lexer.ReadNextToken();
+            else
+                throw new InvalidOperationException("Invalid token");
+        }
+
+        private AstNode ParseIdentifier()
+        {
+            var node = new IdentifierAstNode(_currentToken, (string)_currentToken.Value);
+
+            MoveNext(TokenType.Identifier);
+
+            return node;
         }
     }
 }

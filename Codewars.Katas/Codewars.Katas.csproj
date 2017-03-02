@@ -58,6 +58,7 @@
     <Compile Include="SimpleInteractiveInterpreter\Ast\BinaryOperationAstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Ast\DoubleConstAstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Ast\EmptyAstNode.cs" />
+    <Compile Include="SimpleInteractiveInterpreter\Ast\IdentifierAstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\ILexer.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Interpreter.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Lexer.cs" />

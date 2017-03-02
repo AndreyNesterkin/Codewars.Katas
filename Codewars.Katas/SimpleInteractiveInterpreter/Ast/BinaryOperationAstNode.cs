@@ -12,5 +12,10 @@
         public AstNode LeftOperand { get; private set; }
 
         public AstNode RightOperand { get; private set; }
+
+        public override string ToString()
+        {
+            return $"({LeftOperand} {Token.Value} {RightOperand})";
+        }
     }
 }

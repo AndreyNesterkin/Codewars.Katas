@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Codewars.Katas.SimpleInteractiveInterpreter;
 using System.Globalization;
+using System;
 
 namespace UnitTestProject.SimpleInteractiveInterpreter
 {
@@ -105,7 +106,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         }
 
         [TestMethod]
-        public void MultiplicationGetNextTokenShouldMultiplicationToken()
+        public void MultiplicationGetNextTokenShouldReturnMultiplicationToken()
         {
             var text = "*";
 
@@ -121,7 +122,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         }
 
         [TestMethod]
-        public void DivisionGetNextTokenShouldDivisionToken()
+        public void DivisionGetNextTokenShouldReturnDivisionToken()
         {
             var text = "/";
 
@@ -137,7 +138,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         }
 
         [TestMethod]
-        public void DivisionRemainderGetNextTokenShouldDivisionRemainderToken()
+        public void DivisionRemainderGetNextTokenShouldReturnDivisionRemainderToken()
         {
             var text = "%";
 
@@ -150,6 +151,52 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
             token = lexer.ReadNextToken();
             Assert.AreEqual(TokenType.Eof, token.Type);
+        }
+
+        [TestMethod]
+        public void ParentheseGetNextTokenShouldReturnParenthesesTokens()
+        {
+            var text = "()";
+
+            var lexer = SetupLexer(text);
+
+            var token = lexer.ReadNextToken();
+            Assert.AreEqual(TokenType.LeftParenthesis, token.Type);
+            Assert.AreEqual("(", token.Value);
+
+            token = lexer.ReadNextToken();
+            Assert.AreEqual(TokenType.RightParenthesis, token.Type);
+            Assert.AreEqual(")", token.Value);
+
+            token = lexer.ReadNextToken();
+            Assert.AreEqual(TokenType.Eof, token.Type);
+        }
+
+        [TestMethod]
+        public void IdentifierGetNextTokenShouldReturnIdentifierToken()
+        {
+            var text = "variable_12";
+
+            var lexer = SetupLexer(text);
+
+            var token = lexer.ReadNextToken();
+            Assert.AreEqual(TokenType.Identifier, token.Type);
+            Assert.AreEqual("variable_12", token.Value);
+
+            token = lexer.ReadNextToken();
+            Assert.AreEqual(TokenType.Eof, token.Type);
+        }
+
+        [TestMethod]
+        public void InvalidIdentifierGetNextTokenShouldReturnWrongToken()
+        {
+            var text = "12variable";
+
+            var lexer = SetupLexer(text);
+
+            var token = lexer.ReadNextToken();
+
+            Assert.AreEqual(TokenType.DoubleConst, token.Type);
         }
     }
 }

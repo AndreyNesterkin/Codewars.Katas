@@ -185,5 +185,85 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
             return lexerMock.Object;
         }
+
+        [TestMethod]
+        public void ParenthesesShouldReturnParenthesesAstNodes()
+        {
+            var lexer = SetupParentheses();
+
+            var parser = new Parser(lexer);
+
+            var astNode = parser.Parse();
+
+            Assert.IsInstanceOfType(astNode, typeof(DoubleConstAstNode));
+        }
+
+        private ILexer SetupParentheses()
+        {
+            var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
+
+            var s = new MockSequence();
+
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.LeftParenthesis, "("));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, "1"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.RightParenthesis, ")"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Eof));
+
+            return lexerMock.Object;
+        }
+
+        [TestMethod]
+        public void Expression1ShouldReturnAstNodes()
+        {
+            var lexer = SetupExpression1();
+
+            var parser = new Parser(lexer);
+
+            var astNode = parser.Parse();
+
+            Assert.AreEqual("(2 * (1 + 1))", astNode.ToString());
+        }
+
+        private ILexer SetupExpression1()
+        {
+            var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
+
+            var s = new MockSequence();
+
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, 2d));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Multiplication, "*"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.LeftParenthesis, "("));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, 1d));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Plus, "+"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, 1d));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.RightParenthesis, ")"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Eof));
+
+            return lexerMock.Object;
+        }
+
+        [TestMethod]
+        public void IdentifierShouldReturnIdentifierAstNode()
+        {
+            var lexer = SetupIdentifier();
+
+            var parser = new Parser(lexer);
+
+            var astNode = parser.Parse();
+
+            Assert.IsInstanceOfType(astNode, typeof(IdentifierAstNode));
+        }
+
+        private ILexer SetupIdentifier()
+        {
+            var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
+
+            var s = new MockSequence();
+
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Identifier, "var3"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Eof));
+
+            return lexerMock.Object;
+        }
     }
 }

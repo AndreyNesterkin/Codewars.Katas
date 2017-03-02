@@ -8,5 +8,10 @@
         }
 
         public double DoubleConst { get { return (double)Token.Value; } }
+
+        public override string ToString()
+        {
+            return $"{Token.Value}";
+        }
     }
 }

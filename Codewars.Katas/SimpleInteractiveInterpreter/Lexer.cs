@@ -60,8 +60,17 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             if (_currentChar.Value == '-')
                 return ReadMinusToken();
 
+            if (_currentChar.Value == '(')
+                return ReadLeftParenthesisToken();
+
+            if (_currentChar.Value == ')')
+                return ReadRightParenthesisToken();
+
             if (IsDigit(_currentChar))
                 return ReadDoubleConstToken();
+
+            if (IsLetter(_currentChar) || IsUnderscore(_currentChar))
+                return ReadIdentifierToken();
 
             throw new InvalidOperationException("Invalid character");
         }
@@ -75,6 +84,16 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
         {
             while (IsSpace(_currentChar))
                 MoveNext();
+        }
+
+        private Token ReadLeftParenthesisToken()
+        {
+            return ReadSingleCharToken(TokenType.LeftParenthesis);
+        }
+
+        private Token ReadRightParenthesisToken()
+        {
+            return ReadSingleCharToken(TokenType.RightParenthesis);
         }
 
         private Token ReadDivisionRemainderToken()
@@ -167,6 +186,34 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                 _currentChar = _text[_pos.Value];
             else
                 _currentChar = null;
+        }
+
+        private bool IsLetter(char? currentChar)
+        {
+            return !IsEof(currentChar) && char.IsLetter(currentChar.Value);
+        }
+
+                private bool IsUnderscore(char? currentChar)
+        {
+            return !IsEof(currentChar) && currentChar.Value == '_';
+        }
+
+        private Token ReadIdentifierToken()
+        {
+            return new Token(TokenType.Identifier, ReadIdentifier());
+        }
+
+        private string ReadIdentifier()
+        {
+            var identifier = string.Empty;
+
+            while (IsLetter(_currentChar) || IsDigit(_currentChar) || IsUnderscore(_currentChar))
+            {
+                identifier += _currentChar.Value;
+                MoveNext();
+            }
+
+            return identifier;
         }
     }
 }

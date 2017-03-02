@@ -8,6 +8,9 @@
         Multiplication,
         Division,
         DivisionRemainder,
+        LeftParenthesis,
+        RightParenthesis,
+        Identifier,
         Eof
     }
 }
