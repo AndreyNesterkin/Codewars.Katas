@@ -72,6 +72,9 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             if (IsLetter(_currentChar) || IsUnderscore(_currentChar))
                 return ReadIdentifierToken();
 
+            if (_currentChar.Value == '=')
+                return ReadAssignmentToken();
+
             throw new InvalidOperationException("Invalid character");
         }
 
@@ -214,6 +217,11 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             }
 
             return identifier;
+        }
+
+        private Token ReadAssignmentToken()
+        {
+            return ReadSingleCharToken(TokenType.Assignment);
         }
     }
 }

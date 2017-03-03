@@ -265,5 +265,31 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
             return lexerMock.Object;
         }
+
+        [TestMethod]
+        public void AssignmentShouldReturnAssignmentAstNode()
+        {
+            var lexer = SetupAssignment();
+
+            var parser = new Parser(lexer);
+
+            var astNode = parser.Parse();
+
+            Assert.IsInstanceOfType(astNode, typeof(AssignmentAstNode));
+        }
+
+        private ILexer SetupAssignment()
+        {
+            var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
+
+            var s = new MockSequence();
+
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Identifier, "a"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Assignment, "="));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, 1d));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Eof));
+
+            return lexerMock.Object;
+        }
     }
 }

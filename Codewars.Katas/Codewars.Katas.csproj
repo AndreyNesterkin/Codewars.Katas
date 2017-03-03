@@ -54,6 +54,7 @@
     <Compile Include="ConstructingCar\IFuelTank.cs" />
     <Compile Include="ConstructingCar\IFuelTankDisplay.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimpleInteractiveInterpreter\Ast\AssignmentAstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Ast\AstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Ast\BinaryOperationAstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Ast\DoubleConstAstNode.cs" />

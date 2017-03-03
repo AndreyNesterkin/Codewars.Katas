@@ -69,7 +69,14 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             }
 
             if (_currentToken.Type == TokenType.Identifier)
-                return ParseIdentifier();
+            {
+                var node = ParseIdentifier();
+
+                if (_currentToken.Type == TokenType.Assignment)
+                    node = ParseAssignment(node);
+
+                return node;
+            }
 
             throw new InvalidOperationException("Invalid factor");
         }
@@ -106,6 +113,14 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             MoveNext(TokenType.Identifier);
 
             return node;
+        }
+
+        private AstNode ParseAssignment(AstNode variable)
+        {
+            var assignmentToken = _currentToken;
+            MoveNext(TokenType.Assignment);
+
+            return new AssignmentAstNode(assignmentToken, variable, ParseExpression());
         }
     }
 }

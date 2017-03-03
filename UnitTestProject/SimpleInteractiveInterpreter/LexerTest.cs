@@ -198,5 +198,21 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
             Assert.AreEqual(TokenType.DoubleConst, token.Type);
         }
+
+        [TestMethod]
+        public void AssignmentGetNextTokenShouldReturnAssignmentToken()
+        {
+            var text = "=";
+
+            var lexer = SetupLexer(text);
+
+            var token = lexer.ReadNextToken();
+
+            Assert.AreEqual(TokenType.Assignment, token.Type);
+            Assert.AreEqual("=", token.Value);
+
+            token = lexer.ReadNextToken();
+            Assert.AreEqual(TokenType.Eof, token.Type);
+        }
     }
 }

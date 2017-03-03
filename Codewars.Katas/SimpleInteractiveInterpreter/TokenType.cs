@@ -11,6 +11,7 @@
         LeftParenthesis,
         RightParenthesis,
         Identifier,
+        Assignment,
         Eof
     }
 }
