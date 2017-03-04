@@ -6,6 +6,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
     public class Lexer : ILexer
     {
         private const char NumberDecimalSeparator = '.';
+        private string FunctionDefinitionKeyWord = "fn";
         private string _text;
         private int? _pos;
         private char? _currentChar;
@@ -69,13 +70,35 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             if (IsDigit(_currentChar))
                 return ReadDoubleConstToken();
 
-            if (IsLetter(_currentChar) || IsUnderscore(_currentChar))
-                return ReadIdentifierToken();
+            if (IsFirstIdentifierChar(_currentChar))
+            {
+                var token = ReadIdentifierToken();
+
+                if (IsFuncitionHeader(token))
+                    return new Token(TokenType.FunctionHeader, token.Value);
+
+                return token;
+            }
 
             if (_currentChar.Value == '=')
+            {
+                if (IsFunctionOperator(_currentChar))
+                    return ReadFunctionOperatorToken();
+
                 return ReadAssignmentToken();
+            }
 
             throw new InvalidOperationException("Invalid character");
+        }
+
+        private bool IsFirstIdentifierChar(char? currentChar)
+        {
+            return IsLetter(currentChar) || IsUnderscore(currentChar);
+        }
+
+        private bool IsFuncitionHeader(Token token)
+        {
+            return string.Equals((string)token.Value, FunctionDefinitionKeyWord, StringComparison.CurrentCultureIgnoreCase);
         }
 
         private bool IsSpace(char? currentChar)
@@ -196,7 +219,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return !IsEof(currentChar) && char.IsLetter(currentChar.Value);
         }
 
-                private bool IsUnderscore(char? currentChar)
+        private bool IsUnderscore(char? currentChar)
         {
             return !IsEof(currentChar) && currentChar.Value == '_';
         }
@@ -222,6 +245,30 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
         private Token ReadAssignmentToken()
         {
             return ReadSingleCharToken(TokenType.Assignment);
+        }
+
+        private bool IsFunctionOperator(char? currentChar)
+        {
+            var nextChar = LookAhead();
+
+            return !IsEof(nextChar) && currentChar.Value == '=' &&  nextChar.Value == '>';
+        }
+
+        private char? LookAhead()
+        {
+            var lookAheadPos = _pos + 1;
+
+            if (lookAheadPos < _text.Length)
+               return _text[lookAheadPos.Value];
+            else
+                return null;
+        }
+
+        private Token ReadFunctionOperatorToken()
+        {
+            MoveNext();
+            MoveNext();
+            return new Token(TokenType.FunctionOperator, "=>");
         }
     }
 }

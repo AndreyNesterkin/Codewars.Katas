@@ -214,5 +214,30 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
             token = lexer.ReadNextToken();
             Assert.AreEqual(TokenType.Eof, token.Type);
         }
+
+        [TestMethod]
+        public void FunctionHeaderGetNextTokenShouldReturnFunctionHeaderToken()
+        {
+            var text = "fn avg x y => (x + y) / 2";
+
+            var lexer = SetupLexer(text);
+
+            var token = lexer.ReadNextToken();
+
+            Assert.AreEqual(TokenType.FunctionHeader, token.Type);
+        }
+
+        [TestMethod]
+        public void FunctionBodyGetNextTokenShouldReturnFunctionBodyToken()
+        {
+            var text = "=>";
+
+            var lexer = SetupLexer(text);
+
+            var token = lexer.ReadNextToken();
+
+            Assert.AreEqual(TokenType.FunctionOperator, token.Type);
+            Assert.AreEqual("=>", token.Value);
+        }
     }
 }

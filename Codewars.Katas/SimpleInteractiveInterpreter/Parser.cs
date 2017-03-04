@@ -61,12 +61,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                 return ParseDoubleConst();
 
             if (_currentToken.Type == TokenType.LeftParenthesis)
-            {
-                MoveNext(TokenType.LeftParenthesis);
-                var node = ParseExpression();
-                MoveNext(TokenType.RightParenthesis);
-                return node;
-            }
+                return ParseParentheses();
 
             if (_currentToken.Type == TokenType.Identifier)
             {
@@ -79,6 +74,15 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             }
 
             throw new InvalidOperationException("Invalid factor");
+        }
+
+        private AstNode ParseParentheses()
+        {
+            MoveNext(TokenType.LeftParenthesis);
+            var node = ParseExpression();
+            MoveNext(TokenType.RightParenthesis);
+
+            return node;
         }
 
         private AstNode ParseDoubleConst()

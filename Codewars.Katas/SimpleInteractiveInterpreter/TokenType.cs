@@ -12,6 +12,8 @@
         RightParenthesis,
         Identifier,
         Assignment,
+        FunctionHeader,
+        FunctionOperator,
         Eof
     }
 }
