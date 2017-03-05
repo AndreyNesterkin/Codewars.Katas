@@ -47,13 +47,28 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             if (IsAssignment(node))
                 return EvaluateAssign((AssignmentAstNode)node);
 
-            if (IsVariable(node))
-                return GetVariableValue((IdentifierAstNode)node);
+            if (IsCurrentScopeVariable(node))
+                return GetCurrentScopeVariableValue((IdentifierAstNode)node);
+
+            if (IsGlobalScopeVariable(node))
+                return GetGlobalScopeVariableValue((IdentifierAstNode)node);
 
             if (IsFunctionCall(node))
                 return EvaluateFunctionCall((FunctionCallAstNode)node);
 
             throw new NotSupportedException();
+        }
+
+        private bool IsGlobalScopeVariable(AstNode node)
+        {
+            var identifier = node as IdentifierAstNode;
+
+            return identifier != null && _variableValues.ContainsKey(identifier.Name);
+        }
+
+        private double GetGlobalScopeVariableValue(IdentifierAstNode node)
+        {
+            return _variableValues[node.Name];
         }
 
         private bool IsFunctionCall(AstNode node)
@@ -118,14 +133,14 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return _callStack.Count == 0 ? name : _callStack.Peek() + "." + name;
         }
 
-        private bool IsVariable(AstNode node)
+        private bool IsCurrentScopeVariable(AstNode node)
         {
             var identifier = node as IdentifierAstNode;
 
             return identifier != null && _variableValues.ContainsKey(GetFullName(identifier.Name));
         }
 
-        private double GetVariableValue(IdentifierAstNode node)
+        private double GetCurrentScopeVariableValue(IdentifierAstNode node)
         {
             return _variableValues[GetFullName(node.Name)];
         }

@@ -274,5 +274,56 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
             return new FunctionDefinitionAstNode(new Token(TokenType.Identifier, "echo"), arguments, body);
         }
+
+        [TestMethod]
+        public void FunctionCallWithGlobalVariableEvaluateShouldReturnResult()
+        {
+            var eval = CreateEvaluator();
+
+            eval.Evaluate(SetupGlobalVarAssignment());
+
+            var result = eval.Evaluate(SetupFunctionCallWithGlobalVariable());
+
+            Assert.AreEqual(2d, result);
+        }
+
+        private AstNode SetupGlobalVarAssignment()
+        {
+            var token = new Token(TokenType.Assignment);
+
+            var variable = new IdentifierAstNode(new Token(TokenType.Identifier, "g"), "g");
+
+            var expr = new DoubleConstAstNode(new Token(TokenType.DoubleConst, 1d));
+
+            return new AssignmentAstNode(token, variable, expr);
+        }
+
+        private AstNode SetupFunctionCallWithGlobalVariable()
+        {
+            var functionDefinition = SetupFunctionDefinition3();
+
+            _symbolTable.DefineFunction("f", functionDefinition);
+
+            var arguments = new[]
+            {
+                new DoubleConstAstNode(new Token(TokenType.DoubleConst, 1d)),
+            };
+
+            return new FunctionCallAstNode(new Token(TokenType.Identifier, "f"), arguments);
+        }
+
+        private FunctionDefinitionAstNode SetupFunctionDefinition3()
+        {
+            var arguments = new[]
+           {
+                new IdentifierAstNode(new Token(TokenType.Identifier, "x"), "x"),
+            };
+
+            var globalVar = new IdentifierAstNode(new Token(TokenType.Identifier, "g"), "g");
+
+            var body = new BinaryOperationAstNode(new Token(TokenType.Plus, "+"), arguments[0], globalVar);
+
+            return new FunctionDefinitionAstNode(new Token(TokenType.Identifier, "f"), arguments, body);
+        }
     }
 }
