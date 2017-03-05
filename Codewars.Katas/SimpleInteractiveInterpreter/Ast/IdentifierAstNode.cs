@@ -4,9 +4,9 @@
     {
         public IdentifierAstNode(Token token, string value) : base(token)
         {
-            Identifier = value;
+            Name = value;
         }
 
-        public string Identifier { get; private set; }
+        public string Name { get; private set; }
     }
 }

@@ -31,10 +31,10 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
             if (_currentToken.Type == TokenType.FunctionDefinition)
             {
-                var functionNode = ParseFunctionDefinition();
-                _symbolTable.DefineFunction(functionNode.Name, functionNode);
+                var functionDefinition = ParseFunctionDefinition();
+                _symbolTable.DefineFunction(functionDefinition.Name, functionDefinition);
 
-                return functionNode;
+                return functionDefinition;
             }
 
             return ParseExpression();
@@ -67,7 +67,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                 var argumentNode = ParseIdentifier();
                 arguments.Add(argumentNode);
 
-                _symbolTable.DefineVariable(GetFullName(argumentNode.Identifier), argumentNode);
+                _symbolTable.DefineVariable(GetFullName(argumentNode.Name), argumentNode);
             }
 
             Eat(TokenType.FunctionOperator);
@@ -112,60 +112,60 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
             if (_currentToken.Type == TokenType.Identifier)
             {
-                var identifierNode = ParseIdentifier();
+                var identifier = ParseIdentifier();
 
                 if (_currentToken.Type == TokenType.Assignment)
                 {
-                    var assignmentNode = ParseAssignment(identifierNode);
-                    _symbolTable.DefineVariable(GetFullName(identifierNode.Identifier), identifierNode);
+                    var assignment = ParseAssignment(identifier);
+                    _symbolTable.DefineVariable(GetFullName(identifier.Name), identifier);
 
-                    return assignmentNode;
+                    return assignment;
                 }
 
-                if (!(IsGlobalIdentifier(identifierNode) || IsLocalIdentifier(identifierNode)))
-                    throw new InvalidOperationException($"Identificator {identifierNode.Identifier} is unknown");
+                if (!(IsGlobalIdentifier(identifier) || IsLocalIdentifier(identifier)))
+                    throw new InvalidOperationException($"Identificator {identifier.Name} is unknown");
 
-                if (IsFunctionCall(identifierNode))
-                    return ParseFunctionCall(identifierNode);
+                if (IsFunctionCall(identifier))
+                    return ParseFunctionCall(identifier);
 
-                return identifierNode;
+                return identifier;
             }
 
             throw new InvalidOperationException("Invalid factor");
         }
 
-        private bool IsFunctionCall(IdentifierAstNode identifierNode)
+        private bool IsFunctionCall(IdentifierAstNode identifier)
         {
-            if (!IsGlobalIdentifier(identifierNode))
+            if (!IsGlobalIdentifier(identifier))
                 return false;
 
-            var node = _symbolTable.Lookup(identifierNode.Identifier);
+            var function = _symbolTable.Lookup(identifier.Name);
 
-            return node is FunctionDefinitionAstNode;
+            return function is FunctionDefinitionAstNode;
         }
 
-        private AstNode ParseFunctionCall(IdentifierAstNode identifierNode)
+        private AstNode ParseFunctionCall(IdentifierAstNode identifier)
         {
-            var node = (FunctionDefinitionAstNode)_symbolTable.Lookup(identifierNode.Identifier);
+            var function = (FunctionDefinitionAstNode)_symbolTable.Lookup(identifier.Name);
 
             var expressions = new List<AstNode>();
 
-            var arguments = node.Arguments;
+            var arguments = function.Arguments;
 
             for (var i = 0; i < arguments.Length; i++)
                 expressions.Add(ParseExpression());
 
-            return new FunctionCallAstNode(identifierNode.Token, expressions.ToArray());
+            return new FunctionCallAstNode(identifier.Token, expressions.ToArray());
         }
 
-        private bool IsLocalIdentifier(IdentifierAstNode identifierNode)
+        private bool IsLocalIdentifier(IdentifierAstNode identifier)
         {
-            return _symbolTable.IsDefined(GetFullName(identifierNode.Identifier));
+            return _symbolTable.IsDefined(GetFullName(identifier.Name));
         }
 
-        private bool IsGlobalIdentifier(IdentifierAstNode identifierNode)
+        private bool IsGlobalIdentifier(IdentifierAstNode identifier)
         {
-            return _symbolTable.IsDefined(identifierNode.Identifier);
+            return _symbolTable.IsDefined(identifier.Name);
         }
 
         private AstNode ParseParentheses()
@@ -204,11 +204,11 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
         private IdentifierAstNode ParseIdentifier()
         {
-            var node = new IdentifierAstNode(_currentToken, (string)_currentToken.Value);
+            var identifier = new IdentifierAstNode(_currentToken, (string)_currentToken.Value);
 
             Eat(TokenType.Identifier);
 
-            return node;
+            return identifier;
         }
 
         private string GetFullName(string name)
