@@ -386,7 +386,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
             Assert.AreEqual(1, function.Arguments.Length);
             var arugment = (DoubleConstAstNode)function.Arguments[0];
-            Assert.AreEqual(10d, arugment.DoubleConst);
+            Assert.AreEqual(10d, arugment.Value);
         }
 
         private ILexer SetupFunctionCall()
