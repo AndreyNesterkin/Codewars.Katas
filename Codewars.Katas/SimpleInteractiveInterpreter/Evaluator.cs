@@ -36,7 +36,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return node is EmptyAstNode;
         }
 
-        public double EvaluateNode(AstNode node)
+        private double EvaluateNode(AstNode node)
         {
             if (IsDoubleConst(node))
                 return EvaluateDoubleConst(node);

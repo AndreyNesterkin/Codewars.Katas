@@ -21,7 +21,12 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
         {
             _currentToken = _lexer.ReadNextToken();
 
-            return ParseStatement();
+            var node = ParseStatement();
+
+            if (_currentToken.Type != TokenType.Eof)
+                throw new InvalidOperationException();
+
+            return node;
         }
 
         private AstNode ParseStatement()
@@ -122,7 +127,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                     return assignment;
                 }
 
-                if (!(IsGlobalIdentifier(identifier) || IsLocalIdentifier(identifier)))
+                if (!(IsGlobal(identifier) || IsLocal(identifier)))
                     throw new InvalidOperationException($"Identificator {identifier.Name} is unknown");
 
                 if (IsFunctionCall(identifier))
@@ -136,7 +141,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
         private bool IsFunctionCall(IdentifierAstNode identifier)
         {
-            if (!IsGlobalIdentifier(identifier))
+            if (!IsGlobal(identifier))
                 return false;
 
             var function = _symbolTable.Lookup(identifier.Name);
@@ -158,12 +163,12 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return new FunctionCallAstNode(identifier.Token, expressions.ToArray());
         }
 
-        private bool IsLocalIdentifier(IdentifierAstNode identifier)
+        private bool IsLocal(IdentifierAstNode identifier)
         {
             return _symbolTable.IsDefined(GetFullName(identifier.Name));
         }
 
-        private bool IsGlobalIdentifier(IdentifierAstNode identifier)
+        private bool IsGlobal(IdentifierAstNode identifier)
         {
             return _symbolTable.IsDefined(identifier.Name);
         }

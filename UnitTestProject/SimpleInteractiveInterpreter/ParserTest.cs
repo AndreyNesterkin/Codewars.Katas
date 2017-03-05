@@ -36,9 +36,12 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
         private ILexer SetupDoubleConst(string text)
         {
-            var lexerMock = new Mock<ILexer>();
+            var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
 
-            lexerMock.Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, text));
+            var s = new MockSequence();
+
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, text));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Eof));
 
             return lexerMock.Object;
         }
