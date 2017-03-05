@@ -216,7 +216,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return _currentScope == null ? name : _currentScope + "." + name;
         }
 
-        private AstNode ParseAssignment(AstNode variable)
+        private AstNode ParseAssignment(IdentifierAstNode variable)
         {
             var assignmentToken = _currentToken;
             Eat(TokenType.Assignment);

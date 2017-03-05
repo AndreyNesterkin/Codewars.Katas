@@ -2,13 +2,13 @@
 {
     public class AssignmentAstNode : AstNode
     {
-        public AssignmentAstNode(Token token, AstNode variable, AstNode expr) : base(token)
+        public AssignmentAstNode(Token token, IdentifierAstNode variable, AstNode expression) : base(token)
         {
             Variable = variable;
-            Expression = expr;
+            Expression = expression;
         }
 
-        public AstNode Variable { get; private set; }
+        public IdentifierAstNode Variable { get; private set; }
 
         public AstNode Expression { get; private set; }
     }
