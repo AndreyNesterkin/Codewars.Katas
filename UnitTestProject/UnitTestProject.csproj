@@ -65,6 +65,7 @@
     <Compile Include="SimpleInteractiveInterpreter\InterpreterTest.cs" />
     <Compile Include="SimpleInteractiveInterpreter\LexerTest.cs" />
     <Compile Include="SimpleInteractiveInterpreter\ParserTest.cs" />
+    <Compile Include="SimpleInteractiveInterpreter\SymbolTableTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Codewars.Katas\Codewars.Katas.csproj">

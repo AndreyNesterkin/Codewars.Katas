@@ -9,16 +9,29 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
     [TestClass]
     public class ParserTest
     {
+        private SymbolTable _symbolTable;
+
+        [TestInitialize]
+        public void InitializeTest()
+        {
+            _symbolTable = new SymbolTable();
+        }
+
         [TestMethod]
         public void DoubleConstParseShouldReturnDoubleConstAstNode()
         {
             var lexer = SetupDoubleConst("123");
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
             Assert.IsInstanceOfType(astNode, typeof(DoubleConstAstNode));
+        }
+
+        private Parser CreateParser(ILexer lexer)
+        {
+            return new Parser(lexer, _symbolTable);
         }
 
         private ILexer SetupDoubleConst(string text)
@@ -35,7 +48,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupPlus("1", "2");
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -62,7 +75,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupMinus("1", "2");
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -89,7 +102,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupMultiplication("1", "2");
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -116,7 +129,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupDivision("1", "2");
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -143,7 +156,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupDivisionRemainder("1", "2");
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -170,7 +183,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupEmpty();
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -191,7 +204,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupParentheses();
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -217,7 +230,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupExpression1();
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -247,7 +260,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupIdentifier();
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -256,6 +269,8 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
         private ILexer SetupIdentifier()
         {
+            _symbolTable.DefineVariable("var3", new IdentifierAstNode(new Token(TokenType.Identifier), "var3"));
+
             var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
 
             var s = new MockSequence();
@@ -271,7 +286,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var lexer = SetupAssignment();
 
-            var parser = new Parser(lexer);
+            var parser = CreateParser(lexer);
 
             var astNode = parser.Parse();
 
@@ -287,6 +302,105 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
             lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Identifier, "a"));
             lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Assignment, "="));
             lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, 1d));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Eof));
+
+            return lexerMock.Object;
+        }
+
+        [TestMethod]
+        public void FunctionDefinitionShouldReturnFunctionDefinitionAstNode()
+        {
+            var lexer = SetupFunctionDefinition();
+
+            var parser = CreateParser(lexer);
+
+            var astNode = parser.Parse();
+
+            Assert.IsInstanceOfType(astNode, typeof(FunctionDefinitionAstNode));
+
+            var function = (FunctionDefinitionAstNode)astNode;
+            Assert.AreEqual("echo", function.Name);
+
+            Assert.AreEqual(1, function.Arguments.Length);
+            var arugment = (IdentifierAstNode)function.Arguments[0];
+            Assert.AreEqual("x", arugment.Identifier);
+
+            var body = (IdentifierAstNode)function.Body;
+            Assert.AreEqual("x", body.Identifier);
+        }
+
+        private ILexer SetupFunctionDefinition()
+        {
+            var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
+
+            var s = new MockSequence();
+
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.FunctionDefinition, "fn"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Identifier, "echo"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Identifier, "x"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.FunctionOperator, "=>"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Identifier, "x"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Eof));
+
+            return lexerMock.Object;
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void UsingNotDefinedVariableShouldThrowException()
+        {
+            var lexer = SetupUsingNotDefinedVariable();
+
+            var parser = CreateParser(lexer);
+
+            var astNode = parser.Parse();
+        }
+
+        private ILexer SetupUsingNotDefinedVariable()
+        {
+            var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
+
+            var s = new MockSequence();
+
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Identifier, "x"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Minus, "-"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, "1"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Eof));
+
+            return lexerMock.Object;
+        }
+
+        [TestMethod]
+        public void FunctionCallShouldReturnFunctionCallAstNode()
+        {
+            var lexer = SetupFunctionCall();
+
+            var parser = CreateParser(lexer);
+
+            var astNode = parser.Parse();
+
+            Assert.IsInstanceOfType(astNode, typeof(FunctionCallAstNode));
+
+            var function = (FunctionCallAstNode)astNode;
+            Assert.AreEqual("echo", function.Name);
+
+            Assert.AreEqual(1, function.Arguments.Length);
+            var arugment = (DoubleConstAstNode)function.Arguments[0];
+            Assert.AreEqual(10d, arugment.DoubleConst);
+        }
+
+        private ILexer SetupFunctionCall()
+        {
+            var arguments = new[] { new IdentifierAstNode(new Token(TokenType.Identifier, "x"), "x") };
+            var body = new EmptyAstNode(new Token(TokenType.Eof));
+            _symbolTable.DefineFunction("echo", new FunctionDefinitionAstNode(new Token(TokenType.FunctionDefinition, "echo"), arguments, body));
+
+            var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
+
+            var s = new MockSequence();
+
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Identifier, "echo"));
+            lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.DoubleConst, 10d));
             lexerMock.InSequence(s).Setup(t => t.ReadNextToken()).Returns(new Token(TokenType.Eof));
 
             return lexerMock.Object;

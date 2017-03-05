@@ -75,7 +75,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                 var token = ReadIdentifierToken();
 
                 if (IsFuncitionHeader(token))
-                    return new Token(TokenType.FunctionHeader, token.Value);
+                    return new Token(TokenType.FunctionDefinition, token.Value);
 
                 return token;
             }

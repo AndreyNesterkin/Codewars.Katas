@@ -12,7 +12,7 @@
         RightParenthesis,
         Identifier,
         Assignment,
-        FunctionHeader,
+        FunctionDefinition,
         FunctionOperator,
         Eof
     }

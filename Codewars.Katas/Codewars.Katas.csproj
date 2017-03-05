@@ -59,11 +59,14 @@
     <Compile Include="SimpleInteractiveInterpreter\Ast\BinaryOperationAstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Ast\DoubleConstAstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Ast\EmptyAstNode.cs" />
+    <Compile Include="SimpleInteractiveInterpreter\Ast\FunctionCallAstNode.cs" />
+    <Compile Include="SimpleInteractiveInterpreter\Ast\FunctionDefinitionAstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Ast\IdentifierAstNode.cs" />
     <Compile Include="SimpleInteractiveInterpreter\ILexer.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Interpreter.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Lexer.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Parser.cs" />
+    <Compile Include="SimpleInteractiveInterpreter\SymbolTable.cs" />
     <Compile Include="SimpleInteractiveInterpreter\Token.cs" />
     <Compile Include="SimpleInteractiveInterpreter\TokenType.cs" />
   </ItemGroup>

@@ -224,7 +224,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
             var token = lexer.ReadNextToken();
 
-            Assert.AreEqual(TokenType.FunctionHeader, token.Type);
+            Assert.AreEqual(TokenType.FunctionDefinition, token.Type);
         }
 
         [TestMethod]
