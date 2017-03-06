@@ -272,7 +272,8 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
         private ILexer SetupIdentifier()
         {
-            _symbolTable.DefineVariable("var3", new IdentifierAstNode(new Token(TokenType.Identifier), "var3"));
+            string scope = null;
+            _symbolTable.DefineVariable(scope, "var3", new IdentifierAstNode(new Token(TokenType.Identifier, "var3")));
 
             var lexerMock = new Mock<ILexer>(MockBehavior.Strict);
 
@@ -394,7 +395,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
         private ILexer SetupFunctionCall()
         {
-            var arguments = new[] { new IdentifierAstNode(new Token(TokenType.Identifier, "x"), "x") };
+            var arguments = new[] { new IdentifierAstNode(new Token(TokenType.Identifier, "x")) };
             var body = new EmptyAstNode(new Token(TokenType.Eof));
             _symbolTable.DefineFunction("echo", new FunctionDefinitionAstNode(new Token(TokenType.FunctionDefinition, "echo"), arguments, body));
 
@@ -429,8 +430,8 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         private ILexer FunctionCallWithTwoArgs()
         {
             var arguments = new[] {
-                new IdentifierAstNode(new Token(TokenType.Identifier, "x"), "x"),
-                new IdentifierAstNode(new Token(TokenType.Identifier, "y"), "y")
+                new IdentifierAstNode(new Token(TokenType.Identifier, "x")),
+                new IdentifierAstNode(new Token(TokenType.Identifier, "y"))
             };
             var body = new EmptyAstNode(new Token(TokenType.Eof));
             _symbolTable.DefineFunction("avg", new FunctionDefinitionAstNode(new Token(TokenType.FunctionDefinition, "avg"), arguments, body));

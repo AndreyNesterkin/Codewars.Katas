@@ -14,9 +14,11 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var table = new SymbolTable();
 
-            var token = new Token(TokenType.Identifier);
+            var token = new Token(TokenType.Identifier, "fn");
 
-            table.DefineVariable("fn", new IdentifierAstNode(token, "fn"));
+            string scope = null;
+
+            table.DefineVariable(scope, "fn", new IdentifierAstNode(token));
         }
 
         [TestMethod]
@@ -24,11 +26,13 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var table = new SymbolTable();
 
-            var token = new Token(TokenType.Identifier);
+            var token = new Token(TokenType.Identifier, "a");
 
-            var node = new IdentifierAstNode(token, "a");
+            var node = new IdentifierAstNode(token);
 
-            table.DefineVariable("a", node);
+            string scope = null;
+
+            table.DefineVariable(scope, "a", node);
 
             Assert.AreSame(node, table.Lookup("a"));
         }
@@ -40,7 +44,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
             var token = new Token(TokenType.Identifier, "echo");
 
-            var node = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier), "a"));
+            var node = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier, "a")));
 
             table.DefineFunction("echo", node);
 
@@ -53,12 +57,15 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var table = new SymbolTable();
 
-            var token = new Token(TokenType.Identifier);
-            var variable = new IdentifierAstNode(token, "a");
-            table.DefineVariable("a", variable);
+            var token = new Token(TokenType.Identifier, "a");
+            var variable = new IdentifierAstNode(token);
+
+            string scope = null;
+
+            table.DefineVariable(scope, "a", variable);
 
             token = new Token(TokenType.Identifier, "a");
-            var function = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier), "a"));
+            var function = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier, "a")));
             table.DefineFunction("a", function);
         }
 
@@ -69,12 +76,14 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
             var table = new SymbolTable();
             
             var token = new Token(TokenType.Identifier, "a");
-            var function = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier), "a"));
+            var function = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier, "a")));
             table.DefineFunction("a", function);
 
-            token = new Token(TokenType.Identifier);
-            var variable = new IdentifierAstNode(token, "a");
-            table.DefineVariable("a", variable);
+            token = new Token(TokenType.Identifier, "a");
+            var variable = new IdentifierAstNode(token);
+
+            string scope = null;
+            table.DefineVariable(scope, "a", variable);
         }
 
         [TestMethod]
@@ -83,10 +92,10 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
             var table = new SymbolTable();
 
             var token = new Token(TokenType.Identifier, "a");
-            var function = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier), "b"));
+            var function = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier, "b")));
             table.DefineFunction("a", function);
 
-            function = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier), "b"));
+            function = new FunctionDefinitionAstNode(token, new AstNode[0], new IdentifierAstNode(new Token(TokenType.Identifier, "b")));
             table.DefineFunction("a", function);
             Assert.AreSame(function, table.Lookup("a"));
         }

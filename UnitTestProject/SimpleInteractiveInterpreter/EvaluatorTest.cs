@@ -181,7 +181,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var token = new Token(TokenType.Assignment);
 
-            var variable = new IdentifierAstNode(new Token(TokenType.Identifier, "a"), "a");
+            var variable = new IdentifierAstNode(new Token(TokenType.Identifier, "a"));
 
             var expr = new DoubleConstAstNode(new Token(TokenType.DoubleConst, 4d));
 
@@ -203,7 +203,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
 
         private AstNode SetupOutVariable()
         {
-            return new IdentifierAstNode(new Token(TokenType.Identifier, "a"), "a");
+            return new IdentifierAstNode(new Token(TokenType.Identifier, "a"));
         }
 
         [TestMethod]
@@ -237,8 +237,8 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var arguments = new[]
            {
-                new IdentifierAstNode(new Token(TokenType.Identifier, "x"), "x"),
-                new IdentifierAstNode(new Token(TokenType.Identifier, "y"), "y"),
+                new IdentifierAstNode(new Token(TokenType.Identifier, "x")),
+                new IdentifierAstNode(new Token(TokenType.Identifier, "y")),
             };
 
             var body = new BinaryOperationAstNode(new Token(TokenType.Plus, "+"), arguments[0], arguments[1]);
@@ -267,10 +267,10 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var arguments = new[]
             {
-                new IdentifierAstNode(new Token(TokenType.Identifier, "a"), "a"),
+                new IdentifierAstNode(new Token(TokenType.Identifier, "a")),
             };
 
-            var body = new IdentifierAstNode(new Token(TokenType.Identifier, "a"), "a");
+            var body = new IdentifierAstNode(new Token(TokenType.Identifier, "a"));
 
             return new FunctionDefinitionAstNode(new Token(TokenType.Identifier, "echo"), arguments, body);
         }
@@ -291,7 +291,7 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var token = new Token(TokenType.Assignment);
 
-            var variable = new IdentifierAstNode(new Token(TokenType.Identifier, "g"), "g");
+            var variable = new IdentifierAstNode(new Token(TokenType.Identifier, "g"));
 
             var expr = new DoubleConstAstNode(new Token(TokenType.DoubleConst, 1d));
 
@@ -316,10 +316,10 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
         {
             var arguments = new[]
            {
-                new IdentifierAstNode(new Token(TokenType.Identifier, "x"), "x"),
+                new IdentifierAstNode(new Token(TokenType.Identifier, "x")),
             };
 
-            var globalVar = new IdentifierAstNode(new Token(TokenType.Identifier, "g"), "g");
+            var globalVar = new IdentifierAstNode(new Token(TokenType.Identifier, "g"));
 
             var body = new BinaryOperationAstNode(new Token(TokenType.Plus, "+"), arguments[0], globalVar);
 

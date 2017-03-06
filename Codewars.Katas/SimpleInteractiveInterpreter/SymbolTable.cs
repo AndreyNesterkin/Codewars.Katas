@@ -19,7 +19,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return _identifiers[name];
         }
 
-        public void DefineVariable(string name, IdentifierAstNode node)
+        public void DefineVariable(string scope, string name, IdentifierAstNode node)
         {
             name = name.ToLower();
 
@@ -29,7 +29,12 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             if (HasDefinedFunctionWithSameName(name))
                 throw new InvalidOperationException("Function with same name has already defined");
 
-            UpdateOrInsert(name, node);
+            UpdateOrInsert(GetFullName(scope, name), node);
+        }
+
+        private static string GetFullName(string scope, string name)
+        {
+            return string.IsNullOrEmpty(scope) ? name : scope.ToLower() + "." + name;
         }
 
         private void UpdateOrInsert(string name, AstNode node)
@@ -67,6 +72,11 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
         public bool IsDefined(string name)
         {
             return _identifiers.ContainsKey(name);
+        }
+
+        public bool IsDefined(string scope, string name)
+        {
+            return IsDefined(GetFullName(scope, name));
         }
 
         private bool HasDefinedVariableWithSameName(string name)

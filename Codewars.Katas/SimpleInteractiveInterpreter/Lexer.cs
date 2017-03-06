@@ -155,11 +155,6 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return ReadSingleCharToken(TokenType.Minus);
         }
 
-        private void ThrowException()
-        {
-            throw new InvalidOperationException("Invalid character");
-        }
-
         private static bool IsEof(char? currentChar)
         {
             return currentChar == null;

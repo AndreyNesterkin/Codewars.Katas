@@ -2,9 +2,9 @@
 {
     public class IdentifierAstNode : AstNode
     {
-        public IdentifierAstNode(Token token, string value) : base(token)
+        public IdentifierAstNode(Token token) : base(token)
         {
-            Name = value;
+            Name = (string)token.Value;
         }
 
         public string Name { get; private set; }

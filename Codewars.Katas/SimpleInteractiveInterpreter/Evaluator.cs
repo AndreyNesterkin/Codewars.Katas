@@ -56,7 +56,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             if (IsFunctionCall(node))
                 return EvaluateFunctionCall((FunctionCallAstNode)node);
 
-            throw new NotSupportedException();
+            throw new InvalidOperationException();
         }
 
         private bool IsGlobalScopeVariable(AstNode node)
@@ -197,7 +197,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             else if (type == TokenType.DivisionRemainder)
                 return x % y;
             else
-                throw new NotSupportedException();
+                throw new InvalidOperationException("Invalid token type");
         }
 
         private bool IsBinaryOperation(AstNode node)

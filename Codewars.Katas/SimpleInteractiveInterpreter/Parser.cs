@@ -24,7 +24,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             var node = ParseStatement();
 
             if (_currentToken.Type != TokenType.Eof)
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Failed to parse");
 
             return node;
         }
@@ -49,18 +49,20 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
         {
             Eat(TokenType.FunctionDefinition);
 
-            var function = _currentToken;
+            var token = _currentToken;
             Eat(TokenType.Identifier);
 
-            _currentScope = (string)function.Value;
+            _currentScope = (string)token.Value;
 
             var arguments = ParseArguments();
+
+            Eat(TokenType.FunctionOperator);
 
             var body = ParseExpression();
 
             _currentScope = null;
 
-            return new FunctionDefinitionAstNode(function, arguments, body);
+            return new FunctionDefinitionAstNode(token, arguments, body);
         }
 
         private AstNode[] ParseArguments()
@@ -69,13 +71,11 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
             while (_currentToken.Type != TokenType.FunctionOperator)
             {
-                var argumentNode = ParseIdentifier();
-                arguments.Add(argumentNode);
+                var argument = ParseIdentifier();
+                arguments.Add(argument);
 
-                _symbolTable.DefineVariable(GetFullName(argumentNode.Name), argumentNode);
+                _symbolTable.DefineVariable(_currentScope, argument.Name, argument);
             }
-
-            Eat(TokenType.FunctionOperator);
 
             return arguments.ToArray();
         }
@@ -112,9 +112,6 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             if (_currentToken.Type == TokenType.DoubleConst)
                 return ParseDoubleConst();
 
-            if (_currentToken.Type == TokenType.LeftParenthesis)
-                return ParseParentheses();
-
             if (_currentToken.Type == TokenType.Identifier)
             {
                 var identifier = ParseIdentifier();
@@ -122,12 +119,12 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                 if (_currentToken.Type == TokenType.Assignment)
                 {
                     var assignment = ParseAssignment(identifier);
-                    _symbolTable.DefineVariable(GetFullName(identifier.Name), identifier);
+                    _symbolTable.DefineVariable(_currentScope, identifier.Name, identifier);
 
                     return assignment;
                 }
 
-                if (!(IsGlobal(identifier) || IsLocal(identifier)))
+                if (!(IsGlobalDefined(identifier) || IsLocalDefined(identifier)))
                     throw new InvalidOperationException($"Identificator {identifier.Name} is unknown");
 
                 if (IsFunctionCall(identifier))
@@ -136,26 +133,26 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                 return identifier;
             }
 
-            throw new InvalidOperationException("Invalid factor");
+            return ParseParentheses();
         }
 
-        private bool IsFunctionCall(IdentifierAstNode identifier)
+        private bool IsFunctionCall(IdentifierAstNode functionCall)
         {
-            if (!IsGlobal(identifier))
+            if (!IsGlobalDefined(functionCall))
                 return false;
 
-            var function = _symbolTable.Lookup(identifier.Name);
+            var functionDefinition = _symbolTable.Lookup(functionCall.Name);
 
-            return function is FunctionDefinitionAstNode;
+            return functionDefinition is FunctionDefinitionAstNode;
         }
 
         private AstNode ParseFunctionCall(IdentifierAstNode identifier)
         {
-            var function = (FunctionDefinitionAstNode)_symbolTable.Lookup(identifier.Name);
+            var functionDefinition = (FunctionDefinitionAstNode)_symbolTable.Lookup(identifier.Name);
 
             var expressions = new List<AstNode>();
 
-            var arguments = function.Arguments;
+            var arguments = functionDefinition.Arguments;
 
             for (var i = 0; i < arguments.Length; i++)
                 expressions.Add(ParseExpression());
@@ -163,12 +160,12 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return new FunctionCallAstNode(identifier.Token, expressions.ToArray());
         }
 
-        private bool IsLocal(IdentifierAstNode identifier)
+        private bool IsLocalDefined(IdentifierAstNode identifier)
         {
-            return _symbolTable.IsDefined(GetFullName(identifier.Name));
+            return _symbolTable.IsDefined(_currentScope, identifier.Name);
         }
 
-        private bool IsGlobal(IdentifierAstNode identifier)
+        private bool IsGlobalDefined(IdentifierAstNode identifier)
         {
             return _symbolTable.IsDefined(identifier.Name);
         }
@@ -209,24 +206,19 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
         private IdentifierAstNode ParseIdentifier()
         {
-            var identifier = new IdentifierAstNode(_currentToken, (string)_currentToken.Value);
+            var identifier = new IdentifierAstNode(_currentToken);
 
             Eat(TokenType.Identifier);
 
             return identifier;
         }
 
-        private string GetFullName(string name)
-        {
-            return _currentScope == null ? name : _currentScope + "." + name;
-        }
-
         private AstNode ParseAssignment(IdentifierAstNode variable)
         {
-            var assignmentToken = _currentToken;
+            var token = _currentToken;
             Eat(TokenType.Assignment);
 
-            return new AssignmentAstNode(assignmentToken, variable, ParseExpression());
+            return new AssignmentAstNode(token, variable, ParseExpression());
         }
     }
 }

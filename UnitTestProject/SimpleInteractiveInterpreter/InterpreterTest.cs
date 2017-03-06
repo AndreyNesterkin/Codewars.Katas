@@ -53,5 +53,17 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
             check(ref interpret, "fn avg => 0", null);
             check(ref interpret, "avg = 5", null);
         }
+
+        [TestMethod]
+        public void DescriptionCases()
+        {
+            Interpreter interpret = new Interpreter();
+            check(ref interpret, "x = 10 + (y = 1)", 11);
+            check(ref interpret, "y", 1);
+
+            check(ref interpret, "fn echo x => x", null);
+            check(ref interpret, "fn add x y => x + y", null);
+            check(ref interpret, "add echo 4 echo 3", 7);
+        }
     }
 }

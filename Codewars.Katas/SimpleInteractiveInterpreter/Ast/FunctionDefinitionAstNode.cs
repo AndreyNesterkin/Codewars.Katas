@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Codewars.Katas.SimpleInteractiveInterpreter.Ast
+﻿namespace Codewars.Katas.SimpleInteractiveInterpreter.Ast
 {
     public class FunctionDefinitionAstNode : AstNode
     {
