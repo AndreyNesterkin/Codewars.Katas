@@ -65,5 +65,14 @@ namespace UnitTestProject.SimpleInteractiveInterpreter
             check(ref interpret, "fn add x y => x + y", null);
             check(ref interpret, "add echo 4 echo 3", 7);
         }
+
+        [TestMethod]
+        public void Case1()
+        {
+            Interpreter interpret = new Interpreter();
+            check(ref interpret, "x = 10", 10);
+            check(ref interpret, "fn echo x => x", null);
+            check(ref interpret, "echo 9", 9);
+        }
     }
 }
