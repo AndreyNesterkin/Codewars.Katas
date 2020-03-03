@@ -8,8 +8,8 @@
             Expression = expression;
         }
 
-        public IdentifierAstNode Variable { get; private set; }
+        public IdentifierAstNode Variable { get; }
 
-        public AstNode Expression { get; private set; }
+        public AstNode Expression { get; }
     }
 }

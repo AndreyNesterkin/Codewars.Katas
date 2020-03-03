@@ -6,8 +6,8 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 {
     public class Parser
     {
-        private ILexer _lexer;
-        private SymbolTable _symbolTable;
+        private readonly ILexer _lexer;
+        private readonly SymbolTable _symbolTable;
         private Token _currentToken;
         private string _currentScope;
         

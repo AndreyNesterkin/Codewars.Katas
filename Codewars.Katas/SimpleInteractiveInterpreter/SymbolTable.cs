@@ -7,12 +7,11 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 {
     public class SymbolTable
     {
-        private string[] SystemNames = new[] 
-        {
+        private readonly string[] _systemNames = {
             "fn"
         };
 
-        private Dictionary<string, AstNode> _identifiers = new Dictionary<string, AstNode>();
+        private readonly Dictionary<string, AstNode> _identifiers = new Dictionary<string, AstNode>();
 
         public AstNode Lookup(string name)
         {
@@ -47,7 +46,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
         private bool IsSystemName(string name)
         {
-            return SystemNames.Any(t => t == name);
+            return _systemNames.Any(t => t == name);
         }
 
         private bool HasDefinedFunctionWithSameName(string name)

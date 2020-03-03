@@ -7,11 +7,11 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 {
     public class Evaluator
     {
-        private Dictionary<string, double> _variableValues = new Dictionary<string, double>();
+        private readonly Dictionary<string, double> _variableValues = new Dictionary<string, double>();
 
-        private SymbolTable _symbolTable;
+        private readonly SymbolTable _symbolTable;
 
-        private Stack<string> _callStack = new Stack<string>();
+        private readonly Stack<string> _callStack = new Stack<string>();
 
         public Evaluator(SymbolTable symbolTable)
         {
@@ -26,12 +26,12 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return EvaluateNode(node);
         }
 
-        private bool IsFunctionDefinition(AstNode node)
+        private static bool IsFunctionDefinition(AstNode node)
         {
             return node is FunctionDefinitionAstNode;
         }
 
-        private bool IsEmpty(AstNode node)
+        private static bool IsEmpty(AstNode node)
         {
             return node is EmptyAstNode;
         }
@@ -61,9 +61,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
         private bool IsGlobalScopeVariable(AstNode node)
         {
-            var identifier = node as IdentifierAstNode;
-
-            return identifier != null && _variableValues.ContainsKey(identifier.Name);
+            return node is IdentifierAstNode identifier && _variableValues.ContainsKey(identifier.Name);
         }
 
         private double GetGlobalScopeVariableValue(IdentifierAstNode node)
@@ -71,7 +69,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return _variableValues[node.Name];
         }
 
-        private bool IsFunctionCall(AstNode node)
+        private static bool IsFunctionCall(AstNode node)
         {
             return node is FunctionCallAstNode;
         }
@@ -135,9 +133,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
         private bool IsCurrentScopeVariable(AstNode node)
         {
-            var identifier = node as IdentifierAstNode;
-
-            return identifier != null && _variableValues.ContainsKey(GetFullName(identifier.Name));
+            return node is IdentifierAstNode identifier && _variableValues.ContainsKey(GetFullName(identifier.Name));
         }
 
         private double GetCurrentScopeVariableValue(IdentifierAstNode node)
@@ -145,7 +141,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return _variableValues[GetFullName(node.Name)];
         }
 
-        private bool IsAssignment(AstNode node)
+        private static bool IsAssignment(AstNode node)
         {
             return node is AssignmentAstNode;
         }
@@ -169,12 +165,12 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                 _variableValues.Add(name, value);
         }
 
-        private bool IsDoubleConst(AstNode node)
+        private static bool IsDoubleConst(AstNode node)
         {
             return node is DoubleConstAstNode;
         }
 
-        private double EvaluateDoubleConst(AstNode node)
+        private static double EvaluateDoubleConst(AstNode node)
         {
             return ((DoubleConstAstNode)node).Value;
         }
@@ -200,7 +196,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                 throw new InvalidOperationException("Invalid token type");
         }
 
-        private bool IsBinaryOperation(AstNode node)
+        private static bool IsBinaryOperation(AstNode node)
         {
             return node is BinaryOperationAstNode;
         }

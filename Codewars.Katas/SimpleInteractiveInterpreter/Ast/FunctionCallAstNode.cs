@@ -8,8 +8,8 @@
             Arguments = arguments;
         }
 
-        public string Name { get; private set; }
+        public string Name { get; }
 
-        public AstNode[] Arguments { get; private set; }
+        public AstNode[] Arguments { get; }
     }
 }

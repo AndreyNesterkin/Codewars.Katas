@@ -30,7 +30,7 @@ public class Car1ExampleTests
 
         Enumerable.Range(0, 3000).ToList().ForEach(s => car.RunningIdle());
 
-        Assert.AreEqual(0.10, car.fuelTankDisplay.FillLevel, "Wrong fuel tank fill level!");
+        Assert.AreEqual(0.10, car.FuelTankDisplay.FillLevel, "Wrong fuel tank fill level!");
     }
 
     [TestMethod]
@@ -38,7 +38,7 @@ public class Car1ExampleTests
     {
         var car = new Car(60);
 
-        Assert.IsTrue(car.fuelTankDisplay.IsComplete, "Fuel tank must be complete!");
+        Assert.IsTrue(car.FuelTankDisplay.IsComplete, "Fuel tank must be complete!");
     }
 
     [TestMethod]
@@ -46,7 +46,7 @@ public class Car1ExampleTests
     {
         var car = new Car(4);
 
-        Assert.IsTrue(car.fuelTankDisplay.IsOnReserve, "Fuel tank must be on reserve!");
+        Assert.IsTrue(car.FuelTankDisplay.IsOnReserve, "Fuel tank must be on reserve!");
     }
 
     [TestMethod]
@@ -56,7 +56,7 @@ public class Car1ExampleTests
 
         car.Refuel(40);
 
-        Assert.AreEqual(45, car.fuelTankDisplay.FillLevel, "Wrong fuel tank fill level!");
+        Assert.AreEqual(45, car.FuelTankDisplay.FillLevel, "Wrong fuel tank fill level!");
     }
 
     [TestMethod]
@@ -64,7 +64,7 @@ public class Car1ExampleTests
     {
         var car = new Car();
 
-        Assert.AreEqual(20, car.fuelTankDisplay.FillLevel);
+        Assert.AreEqual(20, car.FuelTankDisplay.FillLevel);
     }
 
     [TestMethod]
@@ -74,11 +74,11 @@ public class Car1ExampleTests
 
         car.Refuel(65);
 
-        Assert.AreEqual(60, car.fuelTankDisplay.FillLevel);
+        Assert.AreEqual(60, car.FuelTankDisplay.FillLevel);
 
         car = new Car(65);
 
-        Assert.AreEqual(60, car.fuelTankDisplay.FillLevel);
+        Assert.AreEqual(60, car.FuelTankDisplay.FillLevel);
     }
 
     [TestMethod]
@@ -98,7 +98,7 @@ public class Car1ExampleTests
     {
         var car = new Car(-1);
 
-        Assert.AreEqual(0, car.fuelTankDisplay.FillLevel);
+        Assert.AreEqual(0, car.FuelTankDisplay.FillLevel);
     }
 
     [TestMethod]
@@ -106,11 +106,11 @@ public class Car1ExampleTests
     {
         var car = new Car();
 
-        var startLevel = car.fuelTankDisplay.FillLevel;
+        var startLevel = car.FuelTankDisplay.FillLevel;
 
         Enumerable.Range(0, 3000).ToList().ForEach(s => car.RunningIdle());
 
-        Assert.AreEqual(startLevel, car.fuelTankDisplay.FillLevel);
+        Assert.AreEqual(startLevel, car.FuelTankDisplay.FillLevel);
     }
 
     [TestMethod]
@@ -130,7 +130,7 @@ public class Car1ExampleTests
 
         car.EngineStart();
 
-        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(0, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -142,13 +142,13 @@ public class Car1ExampleTests
 
         Enumerable.Range(0, 10).ToList().ForEach(s => car.Accelerate(100));
 
-        Assert.AreEqual(100, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(100, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
 
         car.FreeWheel();
         car.FreeWheel();
         car.FreeWheel();
 
-        Assert.AreEqual(97, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(97, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -161,15 +161,15 @@ public class Car1ExampleTests
         Enumerable.Range(0, 10).ToList().ForEach(s => car.Accelerate(100));
 
         car.Accelerate(160);
-        Assert.AreEqual(110, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(110, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
         car.Accelerate(160);
-        Assert.AreEqual(120, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(120, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
         car.Accelerate(160);
-        Assert.AreEqual(130, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(130, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
         car.Accelerate(160);
-        Assert.AreEqual(140, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(140, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
         car.Accelerate(145);
-        Assert.AreEqual(145, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(145, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -183,11 +183,11 @@ public class Car1ExampleTests
 
         car.BrakeBy(20);
 
-        Assert.AreEqual(90, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(90, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
 
         car.BrakeBy(10);
 
-        Assert.AreEqual(80, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(80, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -208,7 +208,7 @@ public class Car1ExampleTests
         car.Accelerate(30);
         car.Accelerate(30);
 
-        Assert.AreEqual(0.98, car.fuelTankDisplay.FillLevel, "Wrong fuel tank fill level!");
+        Assert.AreEqual(0.98, car.FuelTankDisplay.FillLevel, "Wrong fuel tank fill level!");
     }
 
     [TestMethod]
@@ -223,7 +223,7 @@ public class Car1ExampleTests
 
         car.Accelerate(100);
 
-        Assert.AreEqual(20, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(20, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -238,7 +238,7 @@ public class Car1ExampleTests
 
         car.Accelerate(100);
 
-        Assert.AreEqual(5, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(5, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -250,7 +250,7 @@ public class Car1ExampleTests
 
         car.Accelerate(-10);
 
-        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(0, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -262,7 +262,7 @@ public class Car1ExampleTests
 
         car.Accelerate(0);
 
-        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(0, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -274,7 +274,7 @@ public class Car1ExampleTests
 
         Enumerable.Range(0, 26).ToList().ForEach(s => car.Accelerate(260));
 
-        Assert.AreEqual(250, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(250, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -284,7 +284,7 @@ public class Car1ExampleTests
 
         car.Accelerate(100);
 
-        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(0, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -296,7 +296,7 @@ public class Car1ExampleTests
 
         car.FreeWheel();
 
-        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(0, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -308,7 +308,7 @@ public class Car1ExampleTests
 
         car.BrakeBy(10);
 
-        Assert.AreEqual(0, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(0, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -320,7 +320,7 @@ public class Car1ExampleTests
 
         Enumerable.Range(0, 1000).ToList().ForEach(s => car.FreeWheel());
 
-        Assert.AreEqual(0.7, car.fuelTankDisplay.FillLevel, "Wrong fuel level!");
+        Assert.AreEqual(0.7, car.FuelTankDisplay.FillLevel, "Wrong fuel level!");
     }
 
     [TestMethod]
@@ -334,7 +334,7 @@ public class Car1ExampleTests
 
         car.Accelerate(30);
 
-        Assert.AreEqual(99, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(99, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 
     [TestMethod]
@@ -352,6 +352,6 @@ public class Car1ExampleTests
 
         car.Accelerate(87);
 
-        Assert.AreEqual(87, car.drivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
+        Assert.AreEqual(87, car.DrivingInformationDisplay.ActualSpeed, "Wrong actual speed!");
     }
 }

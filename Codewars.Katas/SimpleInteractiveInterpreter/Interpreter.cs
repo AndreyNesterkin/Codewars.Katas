@@ -5,9 +5,9 @@ namespace InterpreterKata
 {
     public class Interpreter
     {
-        private Evaluator _evaluator;
-        private Lexer _lexer;
-        private Parser _parser;
+        private readonly Evaluator _evaluator;
+        private readonly Lexer _lexer;
+        private readonly Parser _parser;
 
         public Interpreter()
         {

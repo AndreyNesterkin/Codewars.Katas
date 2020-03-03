@@ -15,21 +15,9 @@
             get; private set;
         }
 
-        public bool IsComplete
-        {
-            get
-            {
-                return FillLevel == _maxFuelTankSize;
-            }
-        }
+        public bool IsComplete => FillLevel == _maxFuelTankSize;
 
-        public bool IsOnReserve
-        {
-            get
-            {
-                return FillLevel < _reserveLevel;
-            }
-        }
+        public bool IsOnReserve => FillLevel < _reserveLevel;
 
         public void Consume(double liters)
         {

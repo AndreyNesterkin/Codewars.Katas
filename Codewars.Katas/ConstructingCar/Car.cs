@@ -8,15 +8,13 @@
         private const double DefaultFuelLevel = 20.0d;
         private const double ConsumptionOnIdle = 0.0003d;
 
-        private IEngine _engine;
+        private readonly IEngine _engine;
+        private readonly IFuelTank _fuelTank;
+        private readonly IDrivingProcessor _drivingProcessor;
 
-        private IFuelTank _fuelTank;
+        public IFuelTankDisplay FuelTankDisplay { get; }
 
-        private IDrivingProcessor _drivingProcessor;
-
-        public IFuelTankDisplay fuelTankDisplay;
-
-        public IDrivingInformationDisplay drivingInformationDisplay;
+        public IDrivingInformationDisplay DrivingInformationDisplay { get; }
         
 
         public Car() : this(DefaultFuelLevel, DefaultAcceleration)
@@ -33,20 +31,14 @@
 
             _engine = new Engine(_fuelTank);
 
-            fuelTankDisplay = new FuelTankDisplay(_fuelTank);
-
             _drivingProcessor = new DrivingProcessor(_engine, maxAcceleration);
 
-            drivingInformationDisplay = new DrivingInformationDisplay(_drivingProcessor);
+            FuelTankDisplay = new FuelTankDisplay(_fuelTank);
+
+            DrivingInformationDisplay = new DrivingInformationDisplay(_drivingProcessor);
         }
 
-        public bool EngineIsRunning
-        {
-            get
-            {
-                return _engine.IsRunning;
-            }
-        }
+        public bool EngineIsRunning => _engine.IsRunning;
 
         public void EngineStart()
         {

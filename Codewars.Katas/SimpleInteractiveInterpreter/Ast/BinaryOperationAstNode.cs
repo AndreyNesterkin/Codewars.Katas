@@ -9,9 +9,9 @@
             RightOperand = rightOperand;
         }
 
-        public AstNode LeftOperand { get; private set; }
+        public AstNode LeftOperand { get; }
 
-        public AstNode RightOperand { get; private set; }
+        public AstNode RightOperand { get; }
 
         public override string ToString()
         {

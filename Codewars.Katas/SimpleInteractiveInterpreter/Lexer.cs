@@ -20,7 +20,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
 
         private static int? GetStartPosition(string text)
         {
-            return string.IsNullOrEmpty(text) ? new int?() : new int?(0);
+            return string.IsNullOrEmpty(text) ? new int?() : 0;
         }
 
         private static char? GetStartChar(string text, int? pos)
@@ -74,7 +74,7 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             {
                 var token = ReadIdentifierToken();
 
-                if (IsFuncitionHeader(token))
+                if (IsFunctionHeader(token))
                     return new Token(TokenType.FunctionDefinition, token.Value);
 
                 return token;
@@ -96,12 +96,12 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
             return IsLetter(currentChar) || IsUnderscore(currentChar);
         }
 
-        private bool IsFuncitionHeader(Token token)
+        private bool IsFunctionHeader(Token token)
         {
             return string.Equals((string)token.Value, FunctionDefinitionKeyWord, StringComparison.CurrentCultureIgnoreCase);
         }
 
-        private bool IsSpace(char? currentChar)
+        private static bool IsSpace(char? currentChar)
         {
             return !IsEof(currentChar) && currentChar.Value == ' ';
         }
@@ -209,12 +209,12 @@ namespace Codewars.Katas.SimpleInteractiveInterpreter
                 _currentChar = null;
         }
 
-        private bool IsLetter(char? currentChar)
+        private static bool IsLetter(char? currentChar)
         {
             return !IsEof(currentChar) && char.IsLetter(currentChar.Value);
         }
 
-        private bool IsUnderscore(char? currentChar)
+        private static bool IsUnderscore(char? currentChar)
         {
             return !IsEof(currentChar) && currentChar.Value == '_';
         }

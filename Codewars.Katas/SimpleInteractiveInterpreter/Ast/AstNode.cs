@@ -7,6 +7,6 @@
             Token = token;
         }
 
-        public Token Token { get; private set; }
+        public Token Token { get; }
     }
 }

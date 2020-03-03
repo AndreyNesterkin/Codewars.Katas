@@ -2,19 +2,13 @@
 {
     public class DrivingInformationDisplay : IDrivingInformationDisplay
     {
-        private IDrivingProcessor _drivingProcessor;
+        private readonly IDrivingProcessor _drivingProcessor;
 
         public DrivingInformationDisplay(IDrivingProcessor drivingProcessor)
         {
             _drivingProcessor = drivingProcessor;
         }
 
-        public int ActualSpeed
-        {
-            get
-            {
-                return _drivingProcessor.ActualSpeed;
-            }
-        }
+        public int ActualSpeed => _drivingProcessor.ActualSpeed;
     }
 }

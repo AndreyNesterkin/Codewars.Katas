@@ -7,7 +7,7 @@
 
         }
 
-        public double Value { get { return (double)Token.Value; } }
+        public double Value => (double)Token.Value;
 
         public override string ToString()
         {

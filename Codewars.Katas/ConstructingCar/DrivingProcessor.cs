@@ -9,7 +9,8 @@ namespace Codewars.Katas.ConstructingCar
         private const int MaxAcceptableAcceleration = 20;
         private const int MinAcceptableAcceleration = 5;
         private const int DefaultBreak = 10;
-        private Tuple<int, int, double>[] _consumptionOnAccelerateTable = new Tuple<int, int, double>[]
+
+        private readonly Tuple<int, int, double>[] _consumptionOnAccelerateTable = new[]
            {
                 new Tuple<int, int, double>(1, 60, 0.0020d),
                 new Tuple<int, int, double>(61, 100, 0.0014d),
@@ -18,8 +19,8 @@ namespace Codewars.Katas.ConstructingCar
                 new Tuple<int, int, double>(201, MaxSpeedLimit, 0.0030d)
            };
 
-        private IEngine _engine;
-        private int _maxAcceleration;
+        private readonly IEngine _engine;
+        private readonly int _maxAcceleration;
 
         public DrivingProcessor(IEngine engine, int maxAcceleration)
         {
@@ -28,7 +29,7 @@ namespace Codewars.Katas.ConstructingCar
             _maxAcceleration = GetMaxAcceptableAcceleration(maxAcceleration);
         }
 
-        private int GetMaxAcceptableAcceleration(int maxAcceleration)
+        private static int GetMaxAcceptableAcceleration(int maxAcceleration)
         {
             if (maxAcceleration > MaxAcceptableAcceleration)
                 return MaxAcceptableAcceleration;
@@ -88,17 +89,14 @@ namespace Codewars.Katas.ConstructingCar
             ActualSpeed -= GetActualBreak(speed);
         }
 
-        private int GetActualBreak(int speed)
+        private static int GetActualBreak(int speed)
         {
             return speed > DefaultBreak ? DefaultBreak : speed;
         }
 
-        private int LimitSpeed(int speed)
+        private static int LimitSpeed(int speed)
         {
-            if (speed > MaxSpeedLimit)
-                return MaxSpeedLimit;
-
-            return speed;
+            return speed > MaxSpeedLimit ? MaxSpeedLimit : speed;
         }
     }
 }

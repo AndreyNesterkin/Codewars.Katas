@@ -2,7 +2,7 @@
 {
     public class Engine : IEngine
     {
-        IFuelTank _fuelTank;
+        readonly IFuelTank _fuelTank;
 
         public Engine(IFuelTank fuelTank)
         {

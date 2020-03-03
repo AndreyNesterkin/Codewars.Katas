@@ -12,8 +12,8 @@
         {
         }
 
-        public TokenType Type { get; private set; }
+        public TokenType Type { get; }
 
-        public object Value { get; private set; }
+        public object Value { get; }
     }
 }
